@@ -128,7 +128,6 @@ def generate_draw_schedule_entries(count=8):
 
         entries.append({
             "name": name,
-            "subdomain": "",
             "start_date": current_start,
             "end_date": end_date,
             "ticket_limit": 1000,
@@ -163,8 +162,8 @@ def main():
     # Output SQL Insert Statements
     for entry in draw_schedule_entries:
         set_query = f'''INSERT INTO draw_schedule
-        (name, subdomain, start_date, end_date, ticket_limit, repeat_number, active,  clone_end_date, is_continuous, repeat_type, child_set, is_split, updated)
-        VALUES ('{entry['name']}', '{entry['subdomain']}', '{entry['start_date']}', '{entry['end_date']}',
+        (name, start_date, end_date, ticket_limit, repeat_number, active,  clone_end_date, is_continuous, repeat_type, child_set, is_split, updated)
+        VALUES ('{entry['name']}', '{entry['start_date']}', '{entry['end_date']}',
         {entry['ticket_limit']}, {entry['repeat_number']}, {entry['active']}, '{entry['clone_end_date']}', {entry['is_continuous']}, '{entry['repeat_type']}',
         {entry['child_set']}, {entry['is_split']}, '{entry['updated']}');'''
         print(set_query)
@@ -174,8 +173,8 @@ def main():
         draw_schedule_id = cursor.lastrowid
 
         draw_query = f'''INSERT INTO draws
-        (name, subdomain, launched_date, end_date, ticket_limit, active, clone_end_date, created, draw_schedule_id)
-        VALUES ('{entry['name']}', '{entry['subdomain']}', '{entry['start_date']}', '{entry['end_date']}',
+        (name, launched_date, end_date, ticket_limit, active, clone_end_date, created, draw_schedule_id)
+        VALUES ('{entry['name']}', '{entry['start_date']}', '{entry['end_date']}',
         {entry['ticket_limit']},  {entry['active']}, '{entry['clone_end_date']}', '{entry['updated']}', {draw_schedule_id});'''
         print(draw_query)
         cursor = connection.cursor(dictionary=True)
